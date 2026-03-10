@@ -74,14 +74,14 @@ You'll also define:
 - Responsive behavior (how it adapts on mobile)
 - Any additional nav items (Settings, Help, etc.)
 
-The shell is implemented as React components that will wrap your section screen designs.
+The shell is implemented as HTML templates that will wrap your section screen designs.
 
 **Creates:**
 - `product/shell/spec.md` — Shell specification
-- `src/shell/components/AppShell.tsx` — Main shell wrapper
-- `src/shell/components/MainNav.tsx` — Navigation component
-- `src/shell/components/UserMenu.tsx` — User menu component
-- `src/shell/ShellPreview.tsx` — Preview wrapper for Design OS
+- `src/shell/shell.html` — Main shell layout template
+- `src/shell/nav.html` — Navigation partial
+- `src/shell/user-menu.html` — User menu partial
+- `src/shell/shell-preview.html` — Preview page for Design OS
 
 ## What's Next
 

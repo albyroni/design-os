@@ -21,7 +21,7 @@ See [Product Planning](product-planning.md) for details on each command.
 Once the foundation is set, work through each section:
 
 1. **Shape the Section** — Define scope, requirements, and generate sample data + types
-2. **Design the Screen** — Build the actual React components
+2. **Design the Screen** — Build the actual HTML templates with Tailwind CSS
 3. **Capture Screenshots** — Document the design (optional)
 
 Repeat for each section in your roadmap.
@@ -44,7 +44,7 @@ See [Export](export.md) for details on what's included and how to use it.
 | `/design-tokens` | Choose colors and typography |
 | `/design-shell` | Design navigation and layout |
 | `/shape-section` | Define a section's scope, requirements, and generate sample data + types |
-| `/design-screen` | Create screen design components |
+| `/design-screen` | Create screen design HTML templates |
 | `/screenshot-design` | Capture screenshots |
 | `/export-product` | Generate the complete handoff package |
 | `/product-roadmap` | Update product sections (after initial creation) |

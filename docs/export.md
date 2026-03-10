@@ -75,20 +75,18 @@ product-plan/data-shapes/
 └── overview.ts          # Combined type reference (all sections)
 ```
 
-### Shell Components
+### Shell HTML Templates
 
 ```
 product-plan/shell/
 ├── README.md            # Design intent
-├── components/
-│   ├── AppShell.tsx     # Main layout wrapper
-│   ├── MainNav.tsx      # Navigation
-│   ├── UserMenu.tsx     # User menu
-│   └── index.ts         # Exports
+├── shell.html           # Main layout template
+├── nav.html             # Navigation partial
+├── user-menu.html       # User menu partial
 └── screenshot.png       # Visual reference (if captured)
 ```
 
-### Section Components
+### Section HTML Templates
 
 For each section:
 
@@ -96,10 +94,10 @@ For each section:
 product-plan/sections/[section-id]/
 ├── README.md            # Feature overview, user flows
 ├── tests.md             # UI behavior test specs
-├── components/
-│   ├── [Component].tsx  # Exportable components
-│   └── index.ts         # Exports
-├── types.ts             # TypeScript interfaces
+├── [view-name].html     # Exportable HTML templates
+├── partials/            # Partial HTML files (if any)
+│   └── [partial].html
+├── types.ts             # Data shape interfaces
 ├── sample-data.json     # Test data
 └── screenshot.png       # Visual reference (if captured)
 ```
@@ -116,30 +114,35 @@ These instructions describe WHAT to test, not HOW—your coding agent adapts the
 
 ## About the Components
 
-Exported components are:
+Exported HTML templates are:
 
-- **Props-based** — Accept data and callbacks via props, never import data directly
-- **Portable** — Work with any React setup, no Design OS dependencies
+- **Template-engine ready** — Use `{{ placeholder }}` syntax for dynamic data, compatible with Blade, Twig, Jinja2, ERB, and similar engines
+- **Portable** — Work with any web stack, no Design OS dependencies
 - **Complete** — Full styling, responsive design, dark mode support
 - **Production-ready** — Not prototypes or mockups
 
-```tsx
-// Components expect data and callbacks as props
-<InvoiceList
-  invoices={data}
-  onView={(id) => navigate(`/invoices/${id}`)}
-  onEdit={(id) => navigate(`/invoices/${id}/edit`)}
-  onDelete={(id) => confirmDelete(id)}
-  onCreate={() => navigate('/invoices/new')}
-/>
+```html
+{{-- Templates use placeholder syntax for dynamic content --}}
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center justify-between p-4 border-b border-stone-200 dark:border-stone-700">
+    <span class="font-medium text-stone-900 dark:text-stone-100">{{ invoice.clientName }}</span>
+    <div class="flex gap-2">
+      <a href="{{ route_view }}" class="text-sm text-lime-600 hover:text-lime-700">View</a>
+      <a href="{{ route_edit }}" class="text-sm text-stone-600 hover:text-stone-800">Edit</a>
+      <button data-action="delete" data-id="{{ invoice.id }}" class="text-sm text-red-600 hover:text-red-700">Delete</button>
+    </div>
+  </div>
+</div>
 ```
 
 Your implementation agent's job is to:
-- Wire up callbacks to routing and API calls
+- Integrate the HTML templates into your template engine
+- Wire up `{{ placeholder }}` syntax to your backend data
+- Wire up `data-action` attributes and links to your routing and business logic
 - Replace sample data with real data from your backend
 - Implement proper error handling and loading states
 - Implement empty states when no records exist (first-time users, after deletions)
-- Build the backend APIs the components need
+- Build the backend APIs the templates need
 - Write tests based on the provided test instructions (TDD approach)
 
 ## Using the Export
