@@ -2,7 +2,7 @@
 
 Design OS is a **product planning and design tool** that helps users define their product vision, sketch out their data shape, design their UI, and prepare export packages for implementation in a separate codebase.
 
-> **Important**: Design OS is a planning tool, not the end product codebase. The screen designs and components generated here are meant to be exported and integrated into your actual product's codebase.
+> **Important**: Design OS is a planning tool, not the end product codebase. The screen designs and HTML templates generated here are meant to be exported and integrated into your actual product's codebase.
 
 ---
 
@@ -18,7 +18,7 @@ The React application that displays and manages planning files. When modifying t
 
 ### 2. Product Design (Screen Designs & Exports)
 The product you're planning and designing. When creating screen designs and exports:
-- Screen design components live in `src/sections/[section-name]/` and `src/shell/`
+- Screen design HTML templates live in `src/sections/[section-name]/` and `src/shell/`
 - Product definition files live in `product/`
 - Exports are packaged to `product-plan/` for integration into a separate codebase
 - Follow the design requirements specified in each section's spec
@@ -41,7 +41,7 @@ Choose your color palette (from Tailwind) and typography (from Google Fonts). Th
 
 ### 3. Application Shell (`/design-shell`)
 Design the persistent navigation and layout that wraps all sections.
-**Output:** `product/shell/spec.md`, `src/shell/components/`
+**Output:** `product/shell/spec.md`, `src/shell/`
 
 ### 4. For Each Section:
 - `/shape-section` — Define the specification and generate sample data + types
@@ -76,24 +76,22 @@ product/                           # Product definition (portable)
     └── [section-name]/
         ├── spec.md                # Section specification
         ├── data.json              # Sample data for screen designs
-        ├── types.ts               # TypeScript interfaces
+        ├── types.ts               # Data shape interfaces
         └── *.png                  # Screenshots
 
 src/
-├── shell/                         # Shell design components
-│   ├── components/
-│   │   ├── AppShell.tsx
-│   │   ├── MainNav.tsx
-│   │   ├── UserMenu.tsx
-│   │   └── index.ts
-│   └── ShellPreview.tsx
+├── shell/                         # Shell design templates
+│   ├── shell.html                 # Main shell layout
+│   ├── nav.html                   # Navigation partial
+│   ├── user-menu.html             # User menu partial
+│   └── shell-preview.html         # Preview page
 │
 └── sections/
     └── [section-name]/
-        ├── components/            # Exportable components
-        │   ├── [Component].tsx
-        │   └── index.ts
-        └── [ViewName].tsx         # Preview wrapper
+        ├── [view-name].html       # Exportable HTML template
+        ├── partials/              # Partial HTML files (if any)
+        │   └── [partial].html
+        └── [view-name]-preview.html  # Preview page
 
 product-plan/                      # Export package (generated)
 ├── README.md                      # Quick start guide
@@ -107,9 +105,9 @@ product-plan/                      # Export package (generated)
 │       ├── 01-shell.md
 │       └── [NN]-[section-id].md   # Section-specific instructions
 ├── design-system/                 # Tokens, colors, fonts
-├── data-shapes/                   # UI data contracts (types components expect)
-├── shell/                         # Shell components
-└── sections/                      # Section components (with tests.md each)
+├── data-shapes/                   # UI data contracts (types templates expect)
+├── shell/                         # Shell HTML templates
+└── sections/                      # Section HTML templates (with tests.md each)
 ```
 
 ---
@@ -124,7 +122,11 @@ When creating screen designs, follow these guidelines:
 
 - **Use Design Tokens**: When design tokens are defined, apply the product's color palette and typography. Otherwise, fall back to `stone` for neutrals and `lime` for accents.
 
-- **Props-Based Components**: All screen design components must accept data and callbacks via props. Never import data directly in exportable components.
+- **Semantic HTML5**: Use appropriate semantic elements (`<main>`, `<section>`, `<article>`, `<header>`, `<nav>`, `<aside>`, `<footer>`, etc.) for accessibility and SEO.
+
+- **Template Placeholders**: All screen design HTML templates must use `{{ placeholder }}` syntax for dynamic data. Never hardcode data directly in exportable templates.
+
+- **Template-Engine Friendly**: Format HTML cleanly with consistent indentation so templates can be easily copied into server-side template engines (Blade, Twig, Jinja2, ERB, etc.).
 
 - **No Navigation in Section Screen Designs**: Section screen designs should not include navigation chrome. The shell handles all navigation.
 
@@ -194,8 +196,8 @@ The `/export-product` command generates a UI design handoff package:
   - `one-shot-instructions.md`: All milestones combined
   - Incremental instructions in `instructions/incremental/`
 - **Test specs**: Each section includes `tests.md` with UI behavior specs
-- **Portable components**: Props-based, ready for any React setup
-- **Data shapes**: TypeScript interfaces defining what data the components expect
+- **Portable HTML templates**: Semantic HTML5 with Tailwind CSS, ready for any web stack and template engine
+- **Data shapes**: TypeScript interfaces defining what data the templates expect
 
 The handoff focuses on UI designs, product requirements, and user flows. Backend architecture, data modeling, and business logic decisions are left to the implementation agent. The prompts guide the agent to ask clarifying questions about tech stack and requirements before building.
 

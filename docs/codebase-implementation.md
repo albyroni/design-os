@@ -95,15 +95,15 @@ Before finalizing any implementation plan, encourage your agent to review all pr
 
 The Design OS export provides:
 
-- **Finished UI components** — Props-based, fully styled, responsive, dark mode support
+- **Finished UI templates** — HTML5 with Tailwind CSS, responsive, dark mode support
 - **Product requirements** — Specs, user flows, and scope definitions
 - **Design system tokens** — Colors, typography, CSS custom properties
-- **Sample data** — Showing the shape of data components expect
+- **Sample data** — Showing the shape of data templates expect
 - **UI behavior test specs** — What to test from the user's perspective
 
-Your implementation agent builds everything else — the backend, data layer, routing, state management, and tests. The components accept data and fire callbacks via props; how you fulfill those contracts is an implementation decision.
+Your implementation agent builds everything else — the backend, data layer, routing, template integration, and tests. The templates use `{{ placeholder }}` syntax for dynamic content and `data-action` attributes for interactive behaviors; how you fulfill those contracts is an implementation decision.
 
-**The UI components are complete and production-ready.** Wire them up, don't rebuild them.
+**The UI templates are complete and production-ready.** Integrate them into your template engine, don't rebuild them.
 
 ## Tips
 
@@ -113,4 +113,4 @@ Your implementation agent builds everything else — the backend, data layer, ro
 - **Review incrementally** — Section-by-section implementation lets you catch issues early
 - **Test with sample data first** — Use the provided sample-data.json before building real APIs
 - **Handle empty states** — Ensure good UX when no records exist (first-time users)
-- **Trust the components** — They're designed and styled already; wire them up, don't rebuild them
+- **Trust the templates** — They're designed and styled already; integrate them into your template engine, don't rebuild them

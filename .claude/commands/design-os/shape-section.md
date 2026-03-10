@@ -52,7 +52,7 @@ Ask questions one or two at a time, conversationally. Focus on user experience a
 
 ## Step 5: Ask About Shell Configuration
 
-If a shell design has been created for this project (check if `/src/shell/components/AppShell.tsx` exists), ask the user about shell usage:
+If a shell design has been created for this project (check if `/src/shell/shell.html` exists), ask the user about shell usage:
 
 "Should this section's screen designs be displayed **inside the app shell** (with navigation header), or should they be **standalone pages** (without the shell)?
 
@@ -106,7 +106,7 @@ Immediately after writing the spec, run the full sample data generation process 
 
 1. **Check for global data shape** — Read `/product/data-shape/data-shape.md` if it exists. Use entity names and relationships as a guide for consistency.
 
-2. **Analyze the spec** — Determine what data entities are implied by the user flows, what fields each entity needs, and what actions can be taken (these become callback props).
+2. **Analyze the spec** — Determine what data entities are implied by the user flows, what fields each entity needs, and what actions can be taken (these become `data-action` attributes in the HTML templates).
 
 3. **Create `product/sections/[section-id]/data.json`** with:
    - A `_meta` section with human-readable descriptions of each entity and their relationships
@@ -133,8 +133,7 @@ Immediately after writing the spec, run the full sample data generation process 
 4. **Create `product/sections/[section-id]/types.ts`** with:
    - Data interfaces inferred from sample data (strings, numbers, booleans, arrays, nested objects)
    - Union types for status/enum fields based on the spec
-   - A Props interface named `[SectionName]Props` with data as props and optional callback props for each action
-   - JSDoc comments on callback props
+   - User actions documented as comments — these map to `data-action` attributes in the HTML templates
    - PascalCase for interface names, camelCase for property names
 
 ### 6c: Inform the User

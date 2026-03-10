@@ -39,30 +39,30 @@ Once it has enough information, the AI writes the spec and generates sample data
 /design-screen
 ```
 
-Build the actual React components for the section. This is where the spec and sample data become a working UI.
+Build the actual HTML templates for the section. This is where the spec and sample data become a working UI.
 
 ### What Gets Created
 
-**Exportable components** (props-based, portable):
+**Exportable HTML templates** (portable, template-engine ready):
 
-The main component and any sub-components, all accepting data and callbacks via props. These are what get exported to your codebase.
+The main template and any partials, using semantic HTML5 and Tailwind CSS with `{{ placeholder }}` syntax for dynamic content. These are what get exported to your codebase.
 
-```tsx
-// Example: Components accept props, never import data directly
-export function InvoiceList({
-  invoices,
-  onView,
-  onEdit,
-  onDelete,
-  onCreate
-}: InvoiceListProps) {
-  // ...
-}
+```html
+{{-- Example: HTML templates use placeholder syntax for dynamic data --}}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <header class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-stone-900 dark:text-stone-100">Invoices</h1>
+    <a href="{{ route_create }}" class="rounded-lg bg-lime-600 px-4 py-2 text-sm font-medium text-white hover:bg-lime-700">
+      Create Invoice
+    </a>
+  </header>
+  {{-- Invoice list items rendered here --}}
+</div>
 ```
 
-**Preview wrapper** (for Design OS only):
+**Preview page** (for Design OS only):
 
-A wrapper that imports the sample data and feeds it to the component, so you can see it running in Design OS.
+A full HTML page with sample data inlined, so you can see it running in Design OS.
 
 ### Design Requirements
 
@@ -78,10 +78,9 @@ All screen designs include:
 If the spec implies multiple views (list view, detail view, form, etc.), you'll be asked which to build first. Run `/design-screen` again for additional views.
 
 **Creates:**
-- `src/sections/[section-id]/components/[ViewName].tsx` — Main component
-- `src/sections/[section-id]/components/[SubComponent].tsx` — Sub-components as needed
-- `src/sections/[section-id]/components/index.ts` — Component exports
-- `src/sections/[section-id]/[ViewName].tsx` — Preview wrapper
+- `src/sections/[section-id]/[view-name].html` — Main HTML template
+- `src/sections/[section-id]/partials/[partial-name].html` — Partial templates as needed
+- `src/sections/[section-id]/[view-name]-preview.html` — Preview page
 
 **Important:** Restart your dev server after creating screen designs to see the changes.
 
