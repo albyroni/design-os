@@ -57,7 +57,7 @@ Read and analyze `product/sections/[section-id]/spec.md` to understand:
 - What data entities are implied by the user flows?
 - What fields/properties would each entity need?
 - What sample values would be realistic and helpful for design?
-- What actions can be taken on each entity? (These become callback props)
+- What actions can be taken on each entity? (These become `data-action` attributes in the HTML templates)
 
 **If a global data shape exists:** Cross-reference the spec with the data shape. Use the same entity names and ensure consistency.
 

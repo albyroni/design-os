@@ -106,7 +106,7 @@ Immediately after writing the spec, run the full sample data generation process 
 
 1. **Check for global data shape** — Read `/product/data-shape/data-shape.md` if it exists. Use entity names and relationships as a guide for consistency.
 
-2. **Analyze the spec** — Determine what data entities are implied by the user flows, what fields each entity needs, and what actions can be taken (these become callback props).
+2. **Analyze the spec** — Determine what data entities are implied by the user flows, what fields each entity needs, and what actions can be taken (these become `data-action` attributes in the HTML templates).
 
 3. **Create `product/sections/[section-id]/data.json`** with:
    - A `_meta` section with human-readable descriptions of each entity and their relationships

@@ -2,7 +2,7 @@
 
 Design OS is the missing step between your product idea and your codebase.
 
-It's a product planning and design tool that helps you define your product vision, sketch out your data shape, design your UI, and export production-ready components for implementation. Rather than jumping straight into code, you work through a guided process that captures what you're building and why—then hands off everything your coding agent needs to build it right.
+It's a product planning and design tool that helps you define your product vision, sketch out your data shape, design your UI, and export production-ready HTML templates for implementation. Rather than jumping straight into code, you work through a guided process that captures what you're building and why—then hands off everything your coding agent needs to build it right.
 
 ## The Problem
 
@@ -23,7 +23,7 @@ Each step is a conversation. The AI asks questions, you provide direction, and t
 
 ## How It Works
 
-Design OS is its own separate codebase—a design environment you use *before* building. When you're done, you export components and assets to import into your actual product's codebase.
+Design OS is its own separate codebase—a design environment you use *before* building. When you're done, you export HTML templates and assets to import into your actual product's codebase.
 
 You interact with Design OS through slash commands. Each command walks you through a specific part of the process:
 
