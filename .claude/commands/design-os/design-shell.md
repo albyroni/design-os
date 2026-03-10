@@ -170,7 +170,7 @@ Create `src/shell/shell-preview.html` — a full HTML page for previewing the sh
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shell Preview</title>
-  <link href="/src/index.css" rel="stylesheet" />
+  <link href="/src/index.css" rel="stylesheet" /> {{-- Design OS stylesheet path --}}
 </head>
 <body class="min-h-full bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100">
 
