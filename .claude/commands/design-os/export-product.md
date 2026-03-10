@@ -15,7 +15,7 @@ Verify the minimum requirements exist:
 - `/product/data-shape/data-shape.md` — Product entities
 - `/product/design-system/colors.json` — Color tokens
 - `/product/design-system/typography.json` — Typography tokens
-- `src/shell/components/AppShell.tsx` — Application shell
+- `src/shell/shell.html` — Application shell
 
 If required files are missing:
 
@@ -48,7 +48,7 @@ Read all relevant files:
 5. `/product/design-system/typography.json` (if exists)
 6. `/product/shell/spec.md` (if exists)
 7. For each section: `spec.md`, `data.json`, `types.ts`
-8. List screen design components in `src/sections/` and `src/shell/`
+8. List screen design HTML files in `src/sections/` and `src/shell/`
 
 ## Step 3: Create Export Directory Structure
 
@@ -80,22 +80,20 @@ product-plan/
 │   ├── README.md
 │   └── overview.ts
 │
-├── shell/                       # Shell components
+├── shell/                       # Shell HTML templates
 │   ├── README.md
-│   ├── components/
-│   │   ├── AppShell.tsx
-│   │   ├── MainNav.tsx
-│   │   ├── UserMenu.tsx
-│   │   └── index.ts
+│   ├── shell.html
+│   ├── nav.html
+│   ├── user-menu.html
 │   └── screenshot.png (if exists)
 │
-└── sections/                    # Section components
+└── sections/                    # Section HTML templates
     └── [section-id]/
         ├── README.md
         ├── tests.md               # UI behavior test specs
-        ├── components/
-        │   ├── [Component].tsx
-        │   └── index.ts
+        ├── [view-name].html       # Main view template
+        ├── partials/              # Partial HTML files (if any)
+        │   └── [partial].html
         ├── types.ts
         ├── sample-data.json
         └── screenshot.png (if exists)
@@ -159,19 +157,19 @@ Each milestone instruction file should begin with the following preamble (adapt 
 ## About This Handoff
 
 **What you're receiving:**
-- Finished UI designs (React components with full styling)
+- Finished UI designs (HTML5 templates with Tailwind CSS styling)
 - Product requirements and user flow specifications
 - Design system tokens (colors, typography)
-- Sample data showing the shape of data components expect
+- Sample data showing the shape of data templates expect
 - Test specs focused on user-facing behavior
 
 **Your job:**
-- Integrate these components into your application
-- Wire up callback props to your routing and business logic
+- Integrate these HTML templates into your application
+- Wire up template placeholders to your backend data and routing
 - Replace sample data with real data from your backend
 - Implement loading, error, and empty states
 
-The components are props-based — they accept data and fire callbacks. How you architect the backend, data layer, and business logic is up to you.
+The templates use `{{ placeholder }}` syntax for dynamic content, compatible with server-side template engines (Blade, Twig, Jinja2, ERB, etc.). Adapt the placeholder syntax to match your chosen template engine.
 
 ---
 ```
@@ -210,11 +208,11 @@ Define your own design tokens based on your brand guidelines.
 
 [If shell exists:]
 
-Copy the shell components from `product-plan/shell/components/` to your project:
+Copy the shell templates from `product-plan/shell/` to your project:
 
-- `AppShell.tsx` — Main layout wrapper
-- `MainNav.tsx` — Navigation component
-- `UserMenu.tsx` — User menu with avatar
+- `shell.html` — Main shell layout template
+- `nav.html` — Navigation partial
+- `user-menu.html` — User menu partial
 
 **Wire Up Navigation:**
 
@@ -227,7 +225,7 @@ Connect navigation to your routing:
 The user menu expects:
 - User name
 - Avatar URL (optional)
-- Logout callback
+- Logout action
 
 [If shell doesn't exist:]
 
@@ -240,7 +238,7 @@ Design and implement your own application shell with:
 
 - `product-plan/design-system/` — Design tokens
 - `product-plan/shell/README.md` — Shell design intent
-- `product-plan/shell/components/` — Shell React components
+- `product-plan/shell/*.html` — Shell HTML templates
 - `product-plan/shell/screenshot.png` — Shell visual reference
 
 ## Done When
@@ -279,32 +277,32 @@ Implement the [Section Title] feature — [brief description from roadmap].
 - [Bullet point 4 — e.g., "Delete projects with confirmation"]
 - [Bullet point 5 — e.g., "Filter projects by status or search by name"]
 
-[List 3-6 key capabilities that the UI components support]
+[List 3-6 key capabilities that the UI templates support]
 
-## Components Provided
+## HTML Templates Provided
 
-Copy the section components from `product-plan/sections/[section-id]/components/`:
+Copy the section templates from `product-plan/sections/[section-id]/`:
 
-[List components with brief descriptions]
+[List HTML files with brief descriptions]
 
-## Props Reference
+## Data Reference
 
-The components expect these data shapes (see `types.ts` for full definitions):
+The templates use `{{ placeholder }}` syntax for dynamic content. See `types.ts` for the data shapes the templates expect:
 
-**Data props:**
+**Data types:**
 
 [Key types from types.ts — show the main interfaces briefly]
 
-**Callback props:**
+**User actions (from `data-action` attributes in templates):**
 
-| Callback | Triggered When |
-|----------|---------------|
-| `onView` | User clicks to view details |
-| `onEdit` | User clicks to edit |
-| `onDelete` | User clicks to delete |
-| `onCreate` | User clicks to create new |
+| Action | Triggered When |
+|--------|---------------|
+| `view` | User clicks to view details |
+| `edit` | User clicks to edit |
+| `delete` | User clicks to delete |
+| `create` | User clicks to create new |
 
-[Adjust based on actual Props interface]
+[Adjust based on actual documented actions]
 
 ## Expected User Flows
 
@@ -330,11 +328,11 @@ When fully implemented, users should be able to complete these flows:
 2. User [next step — e.g., "confirms deletion in the modal"]
 3. **Outcome:** [Expected result — e.g., "Project removed from list, empty state shown if last item"]
 
-[Include 2-4 flows covering the main user journeys in this section. Reference the specific UI elements and button labels from the components.]
+[Include 2-4 flows covering the main user journeys in this section. Reference the specific UI elements and button labels from the templates.]
 
 ## Empty States
 
-The components include empty state designs. Make sure to handle:
+The templates include empty state designs. Make sure to handle:
 
 - **No data yet:** Show the empty state UI when the primary list/collection is empty
 - **No related records:** Handle cases where associated records don't exist (e.g., a project with no tasks)
@@ -351,16 +349,16 @@ See `product-plan/sections/[section-id]/tests.md` for UI behavior test specs cov
 
 - `product-plan/sections/[section-id]/README.md` — Feature overview and design intent
 - `product-plan/sections/[section-id]/tests.md` — UI behavior test specs
-- `product-plan/sections/[section-id]/components/` — React components
-- `product-plan/sections/[section-id]/types.ts` — TypeScript interfaces
+- `product-plan/sections/[section-id]/*.html` — HTML templates
+- `product-plan/sections/[section-id]/types.ts` — TypeScript data shape interfaces
 - `product-plan/sections/[section-id]/sample-data.json` — Test data
 - `product-plan/sections/[section-id]/screenshot.png` — Visual reference
 
 ## Done When
 
-- [ ] Components render with real data
+- [ ] Templates render with real data
 - [ ] Empty states display properly when no records exist
-- [ ] All callback props are wired to working functionality
+- [ ] All user actions are wired to working functionality
 - [ ] User can complete all expected flows end-to-end
 - [ ] Matches the visual design (see screenshot)
 - [ ] Responsive on mobile
@@ -378,19 +376,19 @@ Create `product-plan/instructions/one-shot-instructions.md` by combining all mil
 ## About This Handoff
 
 **What you're receiving:**
-- Finished UI designs (React components with full styling)
+- Finished UI designs (HTML5 templates with Tailwind CSS styling)
 - Product requirements and user flow specifications
 - Design system tokens (colors, typography)
-- Sample data showing the shape of data components expect
+- Sample data showing the shape of data templates expect
 - Test specs focused on user-facing behavior
 
 **Your job:**
-- Integrate these components into your application
-- Wire up callback props to your routing and business logic
+- Integrate these HTML templates into your application
+- Wire up template placeholders to your backend data and routing
 - Replace sample data with real data from your backend
 - Implement loading, error, and empty states
 
-The components are props-based — they accept data and fire callbacks. How you architect the backend, data layer, and business logic is up to you.
+The templates use `{{ placeholder }}` syntax for dynamic content, compatible with server-side template engines (Blade, Twig, Jinja2, ERB, etc.). Adapt the placeholder syntax to match your chosen template engine.
 
 ---
 
@@ -429,24 +427,22 @@ Each section includes a `tests.md` file with UI behavior test specs. These are *
 [Repeat for all sections, incrementing milestone numbers]
 ```
 
-## Step 7: Copy and Transform Components
+## Step 7: Copy and Transform HTML Templates
 
-### Shell Components
+### Shell Templates
 
-Copy from `src/shell/components/` to `product-plan/shell/components/`:
+Copy from `src/shell/` to `product-plan/shell/`:
 
-- Transform import paths from `@/...` to relative paths
-- Remove any Design OS-specific imports
-- Ensure components are self-contained
+- Copy `shell.html`, `nav.html`, `user-menu.html`
+- Ensure templates are self-contained with no Design OS-specific references
 
-### Section Components
+### Section Templates
 
-For each section, copy from `src/sections/[section-id]/components/` to `product-plan/sections/[section-id]/components/`:
+For each section, copy HTML files from `src/sections/[section-id]/` to `product-plan/sections/[section-id]/`:
 
-- Transform import paths:
-  - `@/../product/sections/[section-id]/types` → `../types`
-- Remove Design OS-specific imports
-- Keep only the exportable components (not preview wrappers)
+- Copy all `.html` files EXCEPT preview pages (`*-preview.html`)
+- Copy `partials/` directory if it exists
+- Keep only the exportable templates (not preview pages)
 
 ### Types Files
 
@@ -485,21 +481,30 @@ For each section, create `product-plan/sections/[section-id]/README.md`:
 
 See `screenshot.png` for the target UI design.
 
-## Components Provided
+## HTML Templates Provided
 
-- `[Component]` — [Brief description]
-- `[SubComponent]` — [Brief description]
+- `[view-name].html` — [Brief description]
+- `partials/[partial-name].html` — [Brief description] (if any)
 
-## Callback Props
+## User Actions
 
-| Callback | Triggered When |
-|----------|---------------|
-| `onView` | User clicks to view details |
-| `onEdit` | User clicks to edit |
-| `onDelete` | User clicks to delete |
-| `onCreate` | User clicks to create new |
+| Action | Triggered When |
+|--------|---------------|
+| `view` | User clicks to view details |
+| `edit` | User clicks to edit |
+| `delete` | User clicks to delete |
+| `create` | User clicks to create new |
 
-[Adjust based on actual Props interface]
+[Adjust based on actual documented actions in templates]
+
+## Template Integration
+
+The HTML templates use `{{ placeholder }}` syntax for dynamic content. To integrate:
+
+1. Copy the HTML into your template engine (Blade, Twig, Jinja2, ERB, etc.)
+2. Adapt the `{{ placeholder }}` syntax to your engine's format
+3. Wire up `data-action` attributes to your backend logic
+4. Replace `href="{{ route_* }}"` with your actual route URLs
 ```
 
 ## Step 9: Generate Section Test Instructions
@@ -509,7 +514,7 @@ For each section, create `product-plan/sections/[section-id]/tests.md` with UI b
 ```markdown
 # Test Specs: [Section Title]
 
-These test specs are **framework-agnostic**. Adapt them to your testing setup (Jest, Vitest, Playwright, Cypress, React Testing Library, etc.).
+These test specs are **framework-agnostic**. Adapt them to your testing setup (Jest, Vitest, Playwright, Cypress, PHPUnit, RSpec, Minitest, etc.).
 
 ## Overview
 
@@ -599,16 +604,16 @@ These test specs are **framework-agnostic**. Adapt them to your testing setup (J
 
 ---
 
-## Component Interaction Tests
+## UI Interaction Tests
 
-### [Component Name]
+### [Template/View Name]
 
 **Renders correctly:**
 - [ ] [Specific element is visible - e.g., "Displays item title 'Sample Item'"]
 - [ ] [Data display - e.g., "Shows formatted date 'Dec 12, 2025'"]
 
 **User interactions:**
-- [ ] [Click behavior - e.g., "Clicking 'Edit' button calls onEdit with item id"]
+- [ ] [Click behavior - e.g., "Clicking 'Edit' button triggers the edit action"]
 - [ ] [Hover behavior - e.g., "Hovering row shows action buttons"]
 - [ ] [Keyboard - e.g., "Pressing Escape closes the modal"]
 
@@ -639,24 +644,16 @@ Use the data from `sample-data.json` or create variations:
 
 [Include 2-3 example data objects based on types.ts that tests can use]
 
-```typescript
+```json
 // Populated state
-const mockItem = {
-  id: "test-1",
-  name: "Test Item",
+{
+  "id": "test-1",
+  "name": "Test Item"
   // ... other fields from types.ts
-};
-
-const mockItems = [mockItem, /* ... more items */];
+}
 
 // Empty states
-const mockEmptyList = [];
-
-const mockItemWithNoChildren = {
-  id: "test-1",
-  name: "Test Item",
-  children: [],
-};
+[]
 ```
 ```
 
@@ -665,7 +662,7 @@ const mockItemWithNoChildren = {
 When generating tests.md for each section:
 
 1. **Read the spec.md thoroughly** — Extract all user flows and requirements
-2. **Study the screen design components** — Note exact button labels, field names, UI text
+2. **Study the screen design HTML templates** — Note exact button labels, field names, UI text
 3. **Review types.ts** — Understand the data shapes for assertions
 4. **Include specific UI text** — Tests should verify exact labels, messages, placeholders
 5. **Cover success and failure paths** — Every action should have both tested
@@ -719,7 +716,7 @@ Neutral text: `text-[neutral]-600 dark:text-[neutral]-400`
 
 ## Google Fonts Import
 
-Add to your HTML `<head>` or CSS:
+Add to your HTML `<head>`:
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -743,7 +740,7 @@ Create `product-plan/data-shapes/README.md`:
 ```markdown
 # UI Data Shapes
 
-These types define the shape of data that the UI components expect to receive as props. They represent the **frontend contract** — what the components need to render correctly.
+These types define the shape of data that the UI templates expect to receive. They represent the **frontend contract** — what the templates need to render correctly.
 
 How you model, store, and fetch this data on the backend is an implementation decision. You may combine, split, or extend these types to fit your architecture.
 
@@ -776,7 +773,7 @@ Create `product-plan/data-shapes/overview.ts` by aggregating all section types:
 // =============================================================================
 // UI Data Shapes — Combined Reference
 //
-// These types define the data that UI components expect to receive as props.
+// These types define the data that UI templates expect to receive.
 // They are a frontend contract, not a database schema. How you model, store,
 // and fetch this data is an implementation decision.
 // =============================================================================
@@ -785,18 +782,18 @@ Create `product-plan/data-shapes/overview.ts` by aggregating all section types:
 // From: sections/[section-1]
 // -----------------------------------------------------------------------------
 
-[Copy entity types from section-1/types.ts — data interfaces only, not Props]
+[Copy entity types from section-1/types.ts — data interfaces only]
 
 // -----------------------------------------------------------------------------
 // From: sections/[section-2]
 // -----------------------------------------------------------------------------
 
-[Copy entity types from section-2/types.ts — data interfaces only, not Props]
+[Copy entity types from section-2/types.ts — data interfaces only]
 
 // [Repeat for all sections]
 ```
 
-Only include the data shape interfaces (e.g., `Invoice`, `LineItem`), not the component Props interfaces. The Props interfaces stay in each section's own `types.ts`.
+Only include the data shape interfaces (e.g., `Invoice`, `LineItem`). The user actions documentation stays in each section's own `types.ts`.
 
 ## Step 12: Generate Prompt Files
 
@@ -820,15 +817,15 @@ Please carefully read and analyze the following files:
 
 After reading these, also review:
 - **@product-plan/design-system/** — Color and typography tokens
-- **@product-plan/data-shapes/** — UI data contracts (the shapes of data the components expect)
-- **@product-plan/shell/** — Application shell components
-- **@product-plan/sections/** — All section components, types, sample data, and test specs
+- **@product-plan/data-shapes/** — UI data contracts (the shapes of data the templates expect)
+- **@product-plan/shell/** — Application shell HTML templates
+- **@product-plan/sections/** — All section HTML templates, types, sample data, and test specs
 
 ## Before You Begin
 
 Review all the provided files, then ask me clarifying questions about:
 
-1. **My tech stack** — What framework, language, and tools I'm using, and any existing codebase conventions
+1. **My tech stack** — What framework, language, template engine, and tools I'm using, and any existing codebase conventions
 2. **Authentication & users** — How users should sign up, log in, and what permissions exist
 3. **Product requirements** — Anything in the specs or user flows that needs clarification
 4. **Anything else** — Whatever you need to know before implementing
@@ -866,8 +863,8 @@ Please carefully read and analyze the following files:
 Also review the section assets:
 - **@product-plan/sections/SECTION_ID/README.md** — Feature overview and design intent
 - **@product-plan/sections/SECTION_ID/tests.md** — UI behavior test specs
-- **@product-plan/sections/SECTION_ID/components/** — React components to integrate
-- **@product-plan/sections/SECTION_ID/types.ts** — TypeScript interfaces
+- **@product-plan/sections/SECTION_ID/*.html** — HTML templates to integrate
+- **@product-plan/sections/SECTION_ID/types.ts** — Data shape interfaces
 - **@product-plan/sections/SECTION_ID/sample-data.json** — Test data
 
 ## Before You Begin
@@ -906,9 +903,9 @@ This folder contains everything needed to implement [Product Name].
 
 **Design Assets:**
 - `design-system/` — Colors, fonts, design tokens
-- `data-shapes/` — UI data contracts (the shapes of data components expect)
-- `shell/` — Application shell components
-- `sections/` — All section components, types, sample data, and test specs
+- `data-shapes/` — UI data contracts (the shapes of data templates expect)
+- `shell/` — Application shell HTML templates
+- `sections/` — All section HTML templates, types, sample data, and test specs
 
 ## How to Use This
 
@@ -936,6 +933,16 @@ Build the entire app in one session:
 5. Answer the agent's clarifying questions
 6. Let the agent plan and implement everything
 
+## Template Integration
+
+The HTML templates use `{{ placeholder }}` syntax for dynamic content. To integrate into your project:
+
+1. **Choose your template engine** — Blade (Laravel), Twig (Symfony), Jinja2 (Python), ERB (Rails), etc.
+2. **Adapt placeholder syntax** — Replace `{{ variable }}` with your engine's syntax if different
+3. **Wire up routes** — Replace `href="{{ route_* }}"` with your actual route URLs
+4. **Connect data** — Pass your backend data to the templates where placeholders expect it
+5. **Handle actions** — Implement the behaviors documented by `data-action` attributes
+
 ## Testing
 
 Each section includes a `tests.md` file with UI behavior test specs. For best results:
@@ -953,7 +960,7 @@ The test specs are **framework-agnostic** — they describe WHAT to test (user-f
 - **Add your own notes** — Customize prompts with project-specific context when needed.
 - **Build on your designs** — Use completed sections as the starting point for future feature development.
 - **Review thoroughly** — Check plans and implementations carefully to catch details and inconsistencies.
-- **The components are flexible** — They accept data and fire callbacks. How you architect the backend is up to you.
+- **The templates are flexible** — They use standard HTML5 and Tailwind CSS, compatible with any web stack.
 
 ---
 
@@ -1000,8 +1007,8 @@ Let the user know:
 **Design Assets:**
 - `design-system/` — Colors, fonts, tokens
 - `data-shapes/` — UI data contracts and combined type reference
-- `shell/` — Application shell components
-- `sections/` — [N] section component packages with test specs
+- `shell/` — Application shell HTML templates
+- `sections/` — [N] section HTML template packages with test specs
 
 **Download:**
 
@@ -1012,17 +1019,17 @@ Restart your dev server and visit the Export page to download `product-plan.zip`
 1. Copy `product-plan/` to your implementation codebase
 2. Open `prompts/one-shot-prompt.md` or `prompts/section-prompt.md`
 3. Add any additional notes, then copy/paste into your coding agent
-4. Answer the agent's clarifying questions about your tech stack, auth, etc.
+4. Answer the agent's clarifying questions about your tech stack, template engine, auth, etc.
 5. Let the agent implement based on the instructions
 
-The components are props-based and portable — they accept data and callbacks, letting your implementation agent handle routing, data fetching, and state management however fits your stack."
+The HTML templates use `{{ placeholder }}` syntax for dynamic content, compatible with server-side template engines (Blade, Twig, Jinja2, ERB, etc.). Adapt the syntax to your chosen engine and wire up the templates to your backend data and routing."
 
 ## Important Notes
 
-- Always transform import paths when copying components
+- Always copy HTML template files when building the export (not preview pages)
 - Include `product-overview.md` context with every implementation session
 - Use the pre-written prompts — they prompt for important clarifying questions
 - Screenshots provide visual reference for fidelity checking
 - Sample data files are for testing before real APIs are built
 - The export is self-contained — no dependencies on Design OS
-- Components are portable — they work with any React setup
+- HTML templates are portable — they work with any web stack and template engine

@@ -138,9 +138,9 @@ Generate TypeScript types based on the data structure.
 
    - Base this on the spec and the variety in sample data
 
-3. **Create a Props interface for the main component:**
-   - Include the data as a prop (e.g., `invoices: Invoice[]`)
-   - Include optional callback props for each action (e.g., `onDelete?: (id: string) => void`)
+3. **Document user actions as comments:**
+   - List the actions users can perform on each entity (e.g., view, edit, delete, create)
+   - These map to `data-action` attributes in the HTML templates
 
 4. **Use consistent entity names:**
    - If a global data shape exists, use the same entity names
@@ -150,7 +150,7 @@ Example types.ts:
 
 ```typescript
 // =============================================================================
-// UI Data Shapes — These define the data the components expect to receive
+// UI Data Shapes — These define the data the HTML templates expect to receive
 // =============================================================================
 
 export interface LineItem {
@@ -171,34 +171,26 @@ export interface Invoice {
 }
 
 // =============================================================================
-// Component Props
+// User Actions — These document the interactive behaviors in the templates
 // =============================================================================
-
-export interface InvoiceListProps {
-  /** The list of invoices to display */
-  invoices: Invoice[]
-  /** Called when user wants to view an invoice's details */
-  onView?: (id: string) => void
-  /** Called when user wants to edit an invoice */
-  onEdit?: (id: string) => void
-  /** Called when user wants to delete an invoice */
-  onDelete?: (id: string) => void
-  /** Called when user wants to archive an invoice */
-  onArchive?: (id: string) => void
-  /** Called when user wants to create a new invoice */
-  onCreate?: () => void
-}
+//
+// Actions are represented as data-action attributes on HTML elements:
+//
+// - view(id)    — User wants to view an invoice's details
+// - edit(id)    — User wants to edit an invoice
+// - delete(id)  — User wants to delete an invoice
+// - archive(id) — User wants to archive an invoice
+// - create      — User wants to create a new invoice
+//
 ```
 
 #### Naming Conventions
 
-- Use PascalCase for interface names: `Invoice`, `LineItem`, `InvoiceListProps`
+- Use PascalCase for interface names: `Invoice`, `LineItem`
 
 - Use camelCase for property names: `clientName`, `dueDate`, `lineItems`
 
-- Props interface should be named `[SectionName]Props` (e.g., `InvoiceListProps`)
-
-- Add JSDoc comments for callback props to explain when they're called
+- Document user actions as comments — these map to `data-action` attributes in the HTML templates
 
 - **Match entity names from the global data shape if one exists**
 
@@ -215,7 +207,7 @@ After creating both files, let the user know:
 The types include:
 
 - `[Entity]` - The main data type
-- `[SectionName]Props` - Props interface for the component (includes callbacks for [list actions])
+- User actions documented as comments (for [list actions])
 
 Review the files and let me know if you'd like any adjustments. When you're ready, run `/design-screen` to create the screen design for this section."
 
@@ -227,7 +219,7 @@ Review the files and let me know if you'd like any adjustments. When you're read
 - Keep field names clear and TypeScript-friendly (camelCase)
 - The data structure should directly map to the spec's user flows
 - Always generate types.ts alongside data.json
-- Callback props should cover all actions mentioned in the spec
+- User actions should cover all interactions mentioned in the spec
 - **Use entity names from the global data shape for consistency across sections**
 - Do NOT present a draft for approval — generate the files immediately and let the user review after
 - If the user requests changes after reviewing, update the files immediately

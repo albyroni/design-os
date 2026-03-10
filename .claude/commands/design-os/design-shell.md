@@ -113,81 +113,94 @@ Create `/product/shell/spec.md`:
 [Any additional design decisions or notes]
 ```
 
-## Step 6: Create Shell Components
+## Step 6: Create Shell HTML Templates
 
-Create the shell components at `src/shell/components/`:
+Create the shell HTML templates at `src/shell/`:
 
-### AppShell.tsx
-The main wrapper component that accepts children and provides the layout structure.
+### shell.html
+The main shell layout template that wraps section content. Use semantic HTML5 elements and Tailwind CSS classes.
 
-```tsx
-interface AppShellProps {
-  children: React.ReactNode
-  navigationItems: Array<{ label: string; href: string; isActive?: boolean }>
-  user?: { name: string; avatarUrl?: string }
-  onNavigate?: (href: string) => void
-  onLogout?: () => void
-}
+```html
+{{-- shell.html - Application shell layout --}}
+<div class="min-h-screen bg-white dark:bg-stone-950">
+  {{-- Sidebar / Top Navigation --}}
+  <nav class="..." aria-label="Main navigation">
+    {{-- Navigation items --}}
+    <a href="{{ nav_item.href }}" class="...">{{ nav_item.label }}</a>
+  </nav>
+
+  {{-- User menu --}}
+  <div class="...">
+    <img src="{{ user.avatarUrl }}" alt="{{ user.name }}" class="h-8 w-8 rounded-full" />
+    <span>{{ user.name }}</span>
+    <a href="{{ route_logout }}">Logout</a>
+  </div>
+
+  {{-- Main content area --}}
+  <main class="...">
+    {{-- Section content is rendered here --}}
+    {{ content }}
+  </main>
+</div>
 ```
 
-### MainNav.tsx
-The navigation component (sidebar or top nav based on the chosen pattern).
+### nav.html
+The navigation partial (sidebar or top nav based on the chosen pattern).
 
-### UserMenu.tsx
-The user menu with avatar and dropdown.
+### user-menu.html
+The user menu partial with avatar and dropdown.
 
-### index.ts
-Export all components.
-
-**Component Requirements:**
-- Use props for all data and callbacks (portable)
+**Template Requirements:**
+- Use `{{ placeholder }}` syntax for all dynamic data (template-engine compatible)
 - Apply design tokens if they exist (colors, fonts)
 - Support light and dark mode with `dark:` variants
 - Be mobile responsive
-- Use Tailwind CSS for styling
-- Use lucide-react for icons
+- Use Tailwind CSS for all styling
+- Use SVG icons inline or reference an icon set (no framework-specific icon libraries)
+- Use semantic HTML5 elements (`<nav>`, `<main>`, `<header>`, etc.)
 
 ## Step 7: Create Shell Preview
 
-Create `src/shell/ShellPreview.tsx` — a preview wrapper for viewing the shell in Design OS:
+Create `src/shell/shell-preview.html` — a full HTML page for previewing the shell in Design OS:
 
-```tsx
-import data from '@/../product/sections/[first-section]/data.json' // if exists
-import { AppShell } from './components/AppShell'
+```html
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shell Preview</title>
+  <link href="/src/index.css" rel="stylesheet" />
+</head>
+<body class="min-h-full bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100">
 
-export default function ShellPreview() {
-  const navigationItems = [
-    { label: '[Section 1]', href: '/section-1', isActive: true },
-    { label: '[Section 2]', href: '/section-2' },
-    { label: '[Section 3]', href: '/section-3' },
-  ]
+  <div class="min-h-screen flex">
+    {{-- Navigation --}}
+    <nav class="w-64 border-r border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 p-4" aria-label="Main navigation">
+      <div class="font-bold text-lg mb-6">[Product Name]</div>
+      <ul class="space-y-1">
+        <li><a href="#" class="block px-3 py-2 rounded-lg bg-lime-50 text-lime-700 dark:bg-lime-900/30 dark:text-lime-400 font-medium">[Section 1]</a></li>
+        <li><a href="#" class="block px-3 py-2 rounded-lg text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800">[Section 2]</a></li>
+        <li><a href="#" class="block px-3 py-2 rounded-lg text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800">[Section 3]</a></li>
+      </ul>
+    </nav>
 
-  const user = {
-    name: 'Alex Morgan',
-    avatarUrl: undefined,
-  }
+    {{-- Main content area --}}
+    <main class="flex-1 p-8">
+      <h1 class="text-2xl font-bold mb-4">Content Area</h1>
+      <p class="text-stone-600 dark:text-stone-400">
+        Section content will render here.
+      </p>
+    </main>
+  </div>
 
-  return (
-    <AppShell
-      navigationItems={navigationItems}
-      user={user}
-      onNavigate={(href) => console.log('Navigate to:', href)}
-      onLogout={() => console.log('Logout')}
-    >
-      <div className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Content Area</h1>
-        <p className="text-stone-600 dark:text-stone-400">
-          Section content will render here.
-        </p>
-      </div>
-    </AppShell>
-  )
-}
+</body>
+</html>
 ```
 
 ## Step 8: Apply Design Tokens
 
-If design tokens exist, apply them to the shell components:
+If design tokens exist, apply them to the shell templates:
 
 **Colors:**
 - Read `/product/design-system/colors.json`
@@ -199,7 +212,7 @@ If design tokens exist, apply them to the shell components:
 - Read `/product/design-system/typography.json`
 - Apply heading font to nav items and titles
 - Apply body font to other text
-- Include Google Fonts import in the preview
+- Include Google Fonts link in the preview page
 
 ## Step 9: Confirm Completion
 
@@ -209,11 +222,10 @@ Let the user know:
 
 **Created files:**
 - `/product/shell/spec.md` — Shell specification
-- `src/shell/components/AppShell.tsx` — Main shell wrapper
-- `src/shell/components/MainNav.tsx` — Navigation component
-- `src/shell/components/UserMenu.tsx` — User menu component
-- `src/shell/components/index.ts` — Component exports
-- `src/shell/ShellPreview.tsx` — Preview wrapper
+- `src/shell/shell.html` — Main shell layout template
+- `src/shell/nav.html` — Navigation partial
+- `src/shell/user-menu.html` — User menu partial
+- `src/shell/shell-preview.html` — Preview page
 
 **Shell features:**
 - [Layout pattern] layout
@@ -231,8 +243,9 @@ Next: Run `/shape-section` to start designing your first section."
 ## Important Notes
 
 - The shell is a screen design — it demonstrates the navigation and layout design
-- Components are props-based and portable to the user's codebase
-- The preview wrapper is for Design OS only — not exported
+- HTML templates use `{{ placeholder }}` syntax for dynamic data, compatible with server-side template engines
+- The preview page is for Design OS only — not exported
 - Apply design tokens when available for consistent styling
 - Keep the shell focused on navigation chrome — no authentication UI
 - Section screen designs will render inside the shell's content area
+- Use semantic HTML5 elements and Tailwind CSS for all styling
